@@ -1,10 +1,13 @@
 <template>
   <div class="app">
     <RouterView></RouterView>
-    <h2>hello vue</h2>
+
+    <TabBar></TabBar>
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import TabBar from "./components/TabBar/TabBar.vue";
+</script>
 
 <style scoped></style>
