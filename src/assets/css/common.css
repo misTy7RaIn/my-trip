@@ -1,3 +1,7 @@
+:root {
+  --van-search-left-icon-color: blue !important;
+}
+
 body {
   font-size: 14px;
 }
