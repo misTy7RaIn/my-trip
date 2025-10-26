@@ -1,5 +1,6 @@
 :root {
   --van-search-left-icon-color: blue !important;
+  --theme-linear-gradient: linear-gradient(90deg, #3f3ff587, #5e3ffc);
 }
 
 body {

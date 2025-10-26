@@ -16,6 +16,7 @@
         </div>
         <div class="stay">住{{ stayCount }}晚</div>
       </div>
+
       <div class="stay"></div>
       <div class="end">
         <div class="data">
@@ -23,40 +24,41 @@
           <span class="time">{{ endData }}</span>
         </div>
       </div>
-      <!-- 价格/人数选择 -->
-      <div class="section price-counter bottom-gray-line">
-        <div class="start">价格不限</div>
-        <div class="end">人数不限</div>
-      </div>
-
-      <!-- 关键字 -->
-      <div class="section keyword bottom-gray-line">关键字/位置/民俗名</div>
-
-      <!-- 热门建议 -->
-      <div class="section hut-suggests">
-        <teleport v-for="(item, inde) in hotSuggests" :key="index">
-          <div
-            class="item"
-            :style="{
-              color: item.tagText.color,
-              background: item.tagText.background.color,
-            }"
-          >
-            {{ item.tagText.text }}
-          </div>
-        </teleport>
-      </div>
-      <!-- <div class="section search-btn">
-        <div class="btn" @click="startSearch">搜索</div>
-      </div> -->
     </div>
-    <van-calendar
-      v-model:show="showCalender"
-      type="range"
-      :round="false"
-      :show-confirm="true"
-      @confirm="onConfirm"
-    />
+  </div>
+  <van-calendar
+    v-model:show="showCalender"
+    type="range"
+    :round="false"
+    :show-confirm="true"
+    @confirm="onConfirm"
+  />
+
+  <!-- 价格/人数选择 -->
+  <div class="section price-counter bottom-gray-line">
+    <div class="start">价格不限</div>
+    <div class="end">人数不限</div>
+  </div>
+
+  <!-- 关键字 -->
+  <div class="section keyword bottom-gray-line">关键字/位置/民俗名</div>
+
+  <!-- 热门建议 -->
+  <div class="section hut-suggests">
+    <template v-for="(item, index) in hotSuggests" :key="index">
+      <div
+        class="item"
+        :style="{
+          color: item.tagText.color,
+          background: item.tagText.background.color,
+        }"
+      >
+        {{ item.tagText.text }}
+      </div>
+    </template>
+  </div>
+  <div class="section search-btn">
+    <div class="btn" @click="startSearch">搜索</div>
   </div>
 </template>
 
@@ -67,6 +69,7 @@ import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import { formatMonthDay, getDiffDays } from "@/utils/foramt_data";
 import useHomeStore from "@/stores/modules/home";
+
 const router = useRouter();
 const cityStore = usecityStore();
 const cityClick = () => {
@@ -93,8 +96,21 @@ const onConfirm = (value) => {
   showCalender.value = false;
 };
 
+//热门建议
 const homeStore = useHomeStore();
 const { hotSuggests } = storeToRefs(homeStore);
+
+//开始搜索
+const startSearch = () => {
+  router.push({
+    path: "/search",
+    query: {
+      startDate: startDate.value,
+      endData: endData.value,
+      currentCity: currentCity.value.cityName,
+    },
+  });
+};
 </script>
 
 <style lang="less" scoped>
@@ -136,7 +152,6 @@ const { hotSuggests } = storeToRefs(homeStore);
     text-align: center;
     font-size: 12px;
     color: #666;
-    width: 200px;
   }
 }
 .section {
@@ -174,25 +189,33 @@ const { hotSuggests } = storeToRefs(homeStore);
   }
 }
 .price-counter {
-  .end {
-    padding-left: 100px;
-  }
   .start {
     border-right: 1px solid #f2f2f2;
-    width: 200px;
-    margin-left: -18px;
   }
 }
-.keyword {
-  margin-left: -18px;
-}
 .hut-suggests {
-  margin: 0 20px;
+  margin: 10 0px;
+  height: auto;
   .item {
     padding: 3px 5px;
     margin: 4px;
     border-radius: 14px;
     font-size: 12px;
+  }
+}
+.search-btn {
+  margin-top: 10px;
+  .btn {
+    width: 342px;
+    height: 38px;
+    max-height: 50px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 38px;
+    text-align: center;
+    border-radius: 20px;
+    color: #fff;
+    background-image: linear-gradient(90deg, #3f3ff587, #5e3ffc);
   }
 }
 </style>

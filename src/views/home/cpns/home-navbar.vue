@@ -17,7 +17,7 @@
   border-bottom: 1px solid #f2f2f2;
   height: 46px;
   .title {
-    color: #ff9576;
+    color: #2b0bc9;
     font-size: 16px;
     font-weight: 600;
   }
