@@ -4,14 +4,14 @@ const tabbarData = [
     image: "tabbar/tab_home.png",
     imageActive: "tabbar/tab_home_active.png",
     path: "/home",
-    iocn: "home-o"
+    icon: "home-o"
   },
   {
     text: "收藏",
     image: "tabbar/tab_favor.png",
     imageActive: "tabbar/tab_favor_active.png",
     path: "/favor",
-    iocn: "star-o"
+    icon: "star-o"
     
   },
   {
@@ -19,14 +19,14 @@ const tabbarData = [
     image: "tabbar/tab_order.png",
     imageActive: "tabbar/tab_order_active.png",
     path: "/order",
-    iocn: "balance-list-o"
+    icon: "balance-list-o"
   },
   {
     text: "消息",
     image: "tabbar/tab_message.png",
     imageActive: "tabbar/tab_message.png",
     path: "/message",
-    iocn: "more-o"
+    icon: "more-o"
   }
 ]
 

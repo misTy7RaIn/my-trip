@@ -26,12 +26,10 @@ const { houselist } = storeToRefs(homeStore);
 <style lang="less" scoped>
 .content {
   padding: 10px 8px;
-
   .title {
     font-size: 22px;
     padding: 10px;
   }
-
   .list {
     display: flex;
     flex-wrap: wrap;

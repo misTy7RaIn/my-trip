@@ -1,64 +1,81 @@
 <template>
-  <div class="search-box">
-    <div class="location">
-      <div class="city" @click="cityClick">{{ currentCity.cityName }}</div>
+  <div class="search-box-wrapper">
+    <!-- 城市和位置 -->
+    <div class="location-card">
+      <div class="city" @click="cityClick">
+        <span class="city-name">{{ currentCity.cityName }}</span>
+        <span class="arrow">›</span>
+      </div>
       <div class="position">
-        <span class="text">我的位置</span>
-        <!-- <img src="../../assets/img/home/icon_location.png" /> -->
         <img src="@/assets/img/home/icon_location.png" />
+        <span class="text">我的位置</span>
       </div>
     </div>
-    <div class="section date-range" @click="showCalender = true">
-      <div class="start">
-        <div class="data">
-          <span class="tip">入住</span>
-          <span class="time">{{ startDate }}</span>
-        </div>
-        <div class="stay">住{{ stayCount }}晚</div>
-      </div>
 
-      <div class="stay"></div>
-      <div class="end">
-        <div class="data">
-          <span class="tip">离店</span>
-          <span class="time">{{ endData }}</span>
+    <!-- 日期选择 -->
+    <div class="date-card" @click="showCalender = true">
+      <div class="date-item">
+        <span class="label">入住</span>
+        <span class="value">{{ startDate }}</span>
+      </div>
+      <div class="stay-duration">
+        <span class="nights">{{ stayCount }}晚</span>
+      </div>
+      <div class="date-item">
+        <div class="date-item-content">
+        <span class="label">离店</span>
+        <span class="value">{{ endData }}</span></div>
+      </div>
+    </div>
+
+    <van-calendar
+      v-model:show="showCalender"
+      type="range"
+      :round="false"
+      :show-confirm="true"
+      @confirm="onConfirm"
+    />
+
+    <!-- 价格/人数选择 -->
+    <div class="filter-card">
+      <div class="filter-item">
+        <span class="filter-label">价格不限</span>
+      </div>
+      <div class="divider"></div>
+      <div class="filter-item">
+        <span class="filter-label">人数不限</span>
+      </div>
+    </div>
+
+    <!-- 关键字搜索 -->
+    <div class="keyword-card">
+      <span class="keyword-placeholder">关键字/位置/民宿名</span>
+    </div>
+
+    <!-- 热门建议 -->
+    <div class="suggests-wrapper">
+      <div class="suggests-title">热门推荐</div>
+      <div class="suggests-list">
+        <div
+          v-for="(item, index) in hotSuggests"
+          :key="index"
+          class="suggest-tag"
+          :style="{
+            color: item.tagText.color,
+            background: item.tagText.background.color,
+          }"
+        >
+          {{ item.tagText.text }}
         </div>
       </div>
     </div>
-  </div>
-  <van-calendar
-    v-model:show="showCalender"
-    type="range"
-    :round="false"
-    :show-confirm="true"
-    @confirm="onConfirm"
-  />
 
-  <!-- 价格/人数选择 -->
-  <div class="section price-counter bottom-gray-line">
-    <div class="start">价格不限</div>
-    <div class="end">人数不限</div>
-  </div>
-
-  <!-- 关键字 -->
-  <div class="section keyword bottom-gray-line">关键字/位置/民俗名</div>
-
-  <!-- 热门建议 -->
-  <div class="section hut-suggests">
-    <template v-for="(item, index) in hotSuggests" :key="index">
-      <div
-        class="item"
-        :style="{
-          color: item.tagText.color,
-          background: item.tagText.background.color,
-        }"
-      >
-        {{ item.tagText.text }}
-      </div>
-    </template>
-  </div>
-  <div class="section search-btn">
-    <div class="btn" @click="startSearch">搜索</div>
+    <!-- 搜索按钮 -->
+    <div class="search-btn-wrapper">
+      <button class="search-btn" @click="startSearch">
+        <span>开始搜索</span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -114,108 +131,225 @@ const startSearch = () => {
 </script>
 
 <style lang="less" scoped>
-.search-box {
+.search-box-wrapper {
   --van-calendar-popup-height: 100%;
+  padding: 0 16px;
 }
-.location {
+
+// 城市位置卡片
+.location-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  height: 44px;
-  padding: 0 20;
+  
   .city {
-    flex: 1px;
-    color: #666;
-    font-size: 18px;
-    margin-left: 10px;
-  }
-  .position {
-    width: 74px;
-    font-size: 12px;
     display: flex;
     align-items: center;
-    img {
-      width: 18px;
-      height: 18px;
-      margin-left: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    
+    .city-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin-right: 4px;
     }
+    
+    .arrow {
+      font-size: 24px;
+      color: #999;
+      font-weight: 300;
+    }
+    
+    &:active {
+      opacity: 0.7;
+    }
+  }
+  
+  .position {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    
+    img {
+      width: 16px;
+      height: 16px;
+    }
+    
     .text {
+      font-size: 13px;
       color: #666;
-      position: relative;
     }
   }
 }
 
-.date-range {
-  height: 44px;
-  .stay {
-    flex: 1;
-    text-align: center;
-    font-size: 12px;
-    color: #666;
-  }
-}
-.section {
+// 日期卡片
+.date-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   display: flex;
-  flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  color: #999;
-  height: 44px;
-  .start {
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  &:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+  
+  .date-item {
     flex: 1;
-    display: flex;
-    height: 44px;
-    align-items: center;
-  }
-  .end {
-    min-width: 30%;
-    padding-left: 20px;
-  }
-  .data {
     display: flex;
     flex-direction: column;
-
-    .tip {
-      font-size: 12px;
+    gap: 6px;
+    .date-item-content{
+      display: flex;
+      flex-direction: column;
+      margin-left: 55px;
+    }
+    .label {
+      font-size: 13px;
       color: #999;
     }
-
-    .time {
-      margin-top: 3px;
+    
+    .value {
+      font-size: 16px;
+      font-weight: 600;
       color: #333;
-      font-size: 15px;
-      font-weight: 500;
+    }
+  }
+  
+  .stay-duration {
+    padding: 0 16px;
+    
+    .nights {
+      font-size: 14px;
+      color: #5e3ffc;
+      font-weight: 600;
+      white-space: nowrap;
     }
   }
 }
-.price-counter {
-  .start {
-    border-right: 1px solid #f2f2f2;
-  }
-}
-.hut-suggests {
-  margin: 10 0px;
-  height: auto;
-  .item {
-    padding: 3px 5px;
-    margin: 4px;
-    border-radius: 14px;
-    font-size: 12px;
-  }
-}
-.search-btn {
-  margin-top: 10px;
-  .btn {
-    width: 342px;
-    height: 38px;
-    max-height: 50px;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 38px;
+
+// 筛选卡片
+.filter-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  
+  .filter-item {
+    flex: 1;
     text-align: center;
-    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    
+    .filter-label {
+      font-size: 15px;
+      color: #666;
+    }
+    
+    &:active {
+      opacity: 0.7;
+    }
+  }
+  
+  .divider {
+    width: 1px;
+    height: 20px;
+    background: #e8e8e8;
+  }
+}
+
+// 关键字卡片
+.keyword-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  &:active {
+    opacity: 0.7;
+  }
+  
+  .keyword-placeholder {
+    font-size: 15px;
+    color: #999;
+  }
+}
+
+// 热门推荐
+.suggests-wrapper {
+  background: #fff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  
+  .suggests-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 12px;
+  }
+  
+  .suggests-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    
+    .suggest-tag {
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      
+      &:active {
+        transform: scale(0.95);
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+// 搜索按钮
+.search-btn-wrapper {
+  padding: 8px 0 20px;
+  
+  .search-btn {
+    width: 100%;
+    height: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 25px;
     color: #fff;
-    background-image: linear-gradient(90deg, #3f3ff587, #5e3ffc);
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s;
+    
+    &:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
   }
 }
 </style>

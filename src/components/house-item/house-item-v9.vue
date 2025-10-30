@@ -3,6 +3,13 @@
     <div class="item-inner">
       <div class="cover">
         <img :src="itemData.image.url" alt="" />
+        <div class="favor-btn" @click="handleFavorClick">
+          <van-icon 
+            :name="isFavorited ? 'like' : 'like-o'" 
+            :color="isFavorited ? '#ff4757' : '#fff'"
+            size="20"
+          />
+        </div>
       </div>
       <div class="info">
         <div class="summary">{{ itemData.summaryText }}</div>
@@ -23,7 +30,8 @@
 </template>
 
 <script setup>
-import { computed } from "@vue/reactivity";
+import { computed } from "vue";
+import useFavorStore from '@/stores/modules/favor';
 
 const props = defineProps({
   itemData: {
@@ -32,9 +40,22 @@ const props = defineProps({
   },
 });
 
+const favorStore = useFavorStore();
+
 const itemScore = computed(() => {
   return Number(props.itemData.commentScore);
 });
+
+// 检查当前房源是否已收藏
+const isFavorited = computed(() => {
+  return favorStore.isFavorite(props.itemData?.houseId);
+});
+
+// 处理收藏点击
+const handleFavorClick = (event) => {
+  event.stopPropagation(); // 阻止事件冒泡
+  favorStore.toggleFavor(props.itemData);
+};
 </script>
 
 <style lang="less" scoped>
@@ -49,8 +70,35 @@ const itemScore = computed(() => {
     overflow: hidden;
 
     .cover {
+      position: relative;
+      
       img {
         width: 100%;
+      }
+
+      .favor-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 32px;
+        height: 32px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        backdrop-filter: blur(4px);
+
+        &:hover {
+          background: rgba(0, 0, 0, 0.5);
+          transform: scale(1.1);
+        }
+
+        &:active {
+          transform: scale(0.95);
+        }
       }
     }
 

@@ -22,7 +22,7 @@ const router = createRouter({
         },
         {
             path: "/order",
-            component: () => import("@/views/order/oder.vue")
+            component: () => import("@/views/order/order.vue")
         },
         {
             path: "/city",

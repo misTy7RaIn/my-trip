@@ -3,7 +3,7 @@
     <div class="top">
       <van-search
         shape="round"
-        show-action="true"
+        :show-action="true"
         v-model="searchValue"
         placeholder="城市/区域/位置"
         @cancel="cancelClick"
